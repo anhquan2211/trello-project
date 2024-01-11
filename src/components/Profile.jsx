@@ -36,7 +36,7 @@ function Profile() {
           aria-expanded={open ? 'true' : undefined}
         >
           <Avatar
-            sx={{ width: 30, height: 30 }}
+            sx={{ width: 36, height: 36 }}
             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0A5YzDyfEiYKLSKfkgP5uOgPheXzhDfARuA&usqp=CAU"
             alt="anhquandev"
           />
