@@ -19,6 +19,9 @@ import Button from '@mui/material/Button'
 import DragHandleIcon from '@mui/icons-material/DragHandle'
 import ListCards from './ListCards'
 
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+
 import { mapOrder } from '@/ultis/sorts'
 
 function Column({ column }) {
@@ -35,8 +38,22 @@ function Column({ column }) {
   }
 
   const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
+
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: column._id, data: { ...column } })
+
+  const dndKitColumnStyles = {
+    // touchAction: 'none', //Dành cho sensor default dạng PointerSensor
+    //Nếu sử dụng CSS.Transform như docs thì sẽ lỗi kiểu stretch khi kéo thả.
+    transform: CSS.Translate.toString(transform),
+    transition
+  }
   return (
     <Box
+      ref={setNodeRef}
+      style={dndKitColumnStyles}
+      {...attributes}
+      {...listeners}
       sx={{
         minWidth: '300px',
         maxWidth: '300px',
