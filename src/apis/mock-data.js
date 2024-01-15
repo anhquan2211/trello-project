@@ -6,7 +6,12 @@ export const mockData = {
     type: 'public', // 'private'
     ownerIds: [], // Những users là Admin của board
     memberIds: [], // Những users là member bình thường của board
-    columnOrderIds: ['column-id-01', 'column-id-03', 'column-id-02'], // Thứ tự sắp xếp / vị trí của các Columns trong 1 boards
+    columnOrderIds: [
+      'column-id-01',
+      'column-id-03',
+      'column-id-02',
+      'column-id-04'
+    ], // Thứ tự sắp xếp / vị trí của các Columns trong 1 boards
     columns: [
       {
         _id: 'column-id-01',
@@ -185,6 +190,28 @@ export const mockData = {
             memberIds: [],
             comments: [],
             attachments: []
+          }
+        ]
+      },
+      {
+        _id: 'column-id-04',
+        boardId: 'board-id-01',
+        title: 'Empty Column 04',
+        /**
+         * Xử lý bug logic thư viện Dnd-kit khi Column là rỗng:
+         * Phía FE sẽ tự tạo ra một cái card đặc biệt: Placeholder Card, không liên quan tới Back-end
+         * Card đặc biệt này sẽ được ẩn ở giao diện UI người dùng.
+         * Cấu trúc Id của cái card này để Unique rất đơn gian, không cần phải làm random phức tạp:
+         * "columnId-placeholder-card" (mỗi column chỉ có thể có tối đa một cái Placeholder Card)
+         * Quan trọng khi tạo: phải đầy đủ: (_id, boardId, columnId, FE_PlaceholderCard)
+         */
+        cardOrderIds: ['column-id-04-placeholderCard'],
+        cards: [
+          {
+            _id: 'column-id-04-placeholderCard',
+            boardId: 'board-id-01',
+            columnId: 'column-id-04',
+            FE_PlaceholderCard: true
           }
         ]
       }
