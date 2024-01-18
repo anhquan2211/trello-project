@@ -9,8 +9,8 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
-  MouseSensor,
-  TouchSensor,
+  // MouseSensor,
+  // TouchSensor,
   DragOverlay,
   defaultDropAnimationSideEffects,
   closestCorners,
@@ -20,6 +20,8 @@ import {
   getFirstCollision
 } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
+
+import { MouseSensor, TouchSensor } from '@/customLibs/DndKitSensors'
 
 import { mapOrder } from '@/ultis/sorts'
 import Column from './Column'
@@ -31,7 +33,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
 
-function BoardContent({ board }) {
+function BoardContent({ board, createNewColumn, createNewCard, moveColumns }) {
   const [orderedColumns, setOrderedColumns] = useState([])
 
   //Cùng một thời điểm chỉ có một phần tử đang được kéo (column hoặc card)
@@ -324,8 +326,11 @@ function BoardContent({ board }) {
 
         //Logic dưới đây để xử lý gọi API
         // const dndOrderedColumnsIds = dndOrderedColumns.map((c) => c._id)
+        //Gọi lên props function moveColumns nằm ở component cha cao nhất (BoardDetail)
+        moveColumns(dndOrderedColumns)
 
         //Cập nhật lại state columns sau khi kéo thả
+        //Vẫn gọi update State ở đây để tránh delay hoặc Flickering giao diện lúc kéo thả cần phải chờ gọi API
         setOrderedColumns(dndOrderedColumns)
       }
     }
@@ -420,7 +425,11 @@ function BoardContent({ board }) {
           p: '10px 0'
         }}
       >
-        <ListColumns columns={orderedColumns} />
+        <ListColumns
+          columns={orderedColumns}
+          createNewColumn={createNewColumn}
+          createNewCard={createNewCard}
+        />
         <DragOverlay dropAnimation={customDropAnimation}>
           {!activeDragItemType && null}
           {activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN && (

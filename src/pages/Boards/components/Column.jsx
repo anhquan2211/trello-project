@@ -27,14 +27,14 @@ import { CSS } from '@dnd-kit/utilities'
 
 import { mapOrder } from '@/ultis/sorts'
 
-function Column({ column }) {
+function Column({ column, createNewCard }) {
   const [anchorEl, setAnchorEl] = useState(null)
   const [openNewCardForm, setOpenNewCardForm] = useState(false)
   const [newCardTitle, setNewCardTitle] = useState('')
 
   const toggleOpenNewCardForm = () => setOpenNewCardForm(!openNewCardForm)
 
-  const addNewCard = () => {
+  const addNewCard = async () => {
     if (!newCardTitle) {
       toast.error('Please enter Card Title!', {
         position: 'bottom-right'
@@ -42,7 +42,18 @@ function Column({ column }) {
       return
     }
 
-    //Gọi API create Card ở đây
+    //Tạo dữ liệu Column để gọi API
+    const newCardData = {
+      title: newCardTitle,
+      columnId: column._id
+    }
+
+    /**
+     * Gọi lên props function createNewColumn nằm ở component cha cao nhất (BoardDetail).
+     * Có thể sử dụng redux để không phải gọi nhiều cấp.
+     */
+    //Gọi API create column ở đây
+    await createNewCard(newCardData)
 
     //Đóng trạng thái thêm Card mới và Clear Input
     toggleOpenNewCardForm()
@@ -231,6 +242,7 @@ function Column({ column }) {
                 size="small"
                 variant="outlined"
                 autoFocus
+                data-no-dnd="true"
                 value={newCardTitle}
                 onChange={(e) => setNewCardTitle(e.target.value)}
                 sx={{
@@ -265,6 +277,7 @@ function Column({ column }) {
                   variant="contained"
                   color="primary"
                   size="small"
+                  data-no-dnd="true"
                   sx={{
                     boxShadow: 'none',
                     border: '0.5px solid',
