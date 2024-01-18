@@ -28,9 +28,28 @@ export const createNewColumnAPI = async (newColumnData) => {
   const response = await axios.post(`${API_ROOT}/v1/columns`, newColumnData)
   return response.data
 }
+export const updateColumnDetailsAPI = async (columnId, updateData) => {
+  const response = await axios.put(
+    `${API_ROOT}/v1/columns/${columnId}`,
+    updateData
+  )
+
+  //Lưu ý: axios sẽ trả về kết quả có thuộc tính data
+  return response.data
+}
 
 // API call Cards
 export const createNewCardAPI = async (newCardData) => {
   const response = await axios.post(`${API_ROOT}/v1/cards`, newCardData)
+  return response.data
+}
+
+export const moveCardDifferentColumnAPI = async (updateData) => {
+  const response = await axios.put(
+    `${API_ROOT}/v1/boards/supports/moving_card`,
+    updateData
+  )
+
+  //Lưu ý: axios sẽ trả về kết quả có thuộc tính data
   return response.data
 }
