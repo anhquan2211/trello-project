@@ -25,8 +25,6 @@ import TextField from '@mui/material/TextField'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 
-import { mapOrder } from '@/ultis/sorts'
-
 function Column({ column, createNewCard }) {
   const [anchorEl, setAnchorEl] = useState(null)
   const [openNewCardForm, setOpenNewCardForm] = useState(false)
@@ -34,7 +32,7 @@ function Column({ column, createNewCard }) {
 
   const toggleOpenNewCardForm = () => setOpenNewCardForm(!openNewCardForm)
 
-  const addNewCard = async () => {
+  const addNewCard = () => {
     if (!newCardTitle) {
       toast.error('Please enter Card Title!', {
         position: 'bottom-right'
@@ -53,7 +51,7 @@ function Column({ column, createNewCard }) {
      * Có thể sử dụng redux để không phải gọi nhiều cấp.
      */
     //Gọi API create column ở đây
-    await createNewCard(newCardData)
+    createNewCard(newCardData)
 
     //Đóng trạng thái thêm Card mới và Clear Input
     toggleOpenNewCardForm()
@@ -70,7 +68,8 @@ function Column({ column, createNewCard }) {
     setAnchorEl(null)
   }
 
-  const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
+  //Cards đã được sắp xếp ở component cha cao nhất (boardDetail)
+  const orderedCards = column.cards
 
   const {
     attributes,
